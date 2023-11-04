@@ -1,0 +1,50 @@
+/**
+ * 
+ */
+package za.co.fynbos.model;
+
+import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.List;
+
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+
+/**
+ * @author Noxolo.Mkhungo
+ *
+ */
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name = "brand", schema = "commerce")
+public class Brand implements Serializable {
+	
+	@Id
+	@SequenceGenerator(name = "brand_generator", sequenceName = "brand_sequence", allocationSize = 1, initialValue = 100)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "brand_generator")
+	@Column(name = "brand_id")
+	private Long brandId;
+
+	@Column(name = "brand_name")
+	private String brandName;
+
+	@ManyToMany
+	@JoinTable(
+			name = "brands_has_products",
+			joinColumns = @JoinColumn(name = "product_brand_id", referencedColumnName = "brand_id"),
+			inverseJoinColumns = @JoinColumn(name = "product_id", referencedColumnName = "product_id",foreignKey=@ForeignKey(name = "brand_product_fk"))
+	)
+	private List<Product>products ;
+
+
+}
