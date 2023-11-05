@@ -4,27 +4,26 @@
 package za.co.fynbos.model;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 /**
  * @author Noxolo.Mkhungo
  *
  */
-
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@NamedEntityGraph(
+		name = "Category.products",
+		attributeNodes = {
+				@NamedAttributeNode("products")
+		}
+)
 @Table(name = "category", schema = "commerce")
 public class Category implements Serializable{
 	

@@ -4,17 +4,10 @@
 package za.co.fynbos.model;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.List;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
+import lombok.*;
 
 /**
  * @author Noxolo.Mkhungo
@@ -45,6 +38,10 @@ public class Brand implements Serializable {
 			inverseJoinColumns = @JoinColumn(name = "product_id", referencedColumnName = "product_id",foreignKey=@ForeignKey(name = "brand_product_fk"))
 	)
 	private List<Product>products ;
+
+	public  Brand( String brandName){
+		this.brandName=brandName;
+	}
 
 
 }
