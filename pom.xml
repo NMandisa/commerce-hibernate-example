@@ -6,12 +6,10 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>za.co.fynbos</groupId>
-	<artifactId>catalog-product</artifactId>
+	<artifactId>commerce-hibernate6-example</artifactId>
 	<version>1.0-SNAPSHOT</version>
 
 	<name>catalog-product</name>
-	<!-- FIXME change it to the project's website -->
-	<url>http://www.example.com</url>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
