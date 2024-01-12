@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+		"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+	<session-factory>
+
+		<!-- <property name="hibernate.dialect">
+			org.hibernate.dialect.MySQLDialect
+		</property> -->
+
+		<property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
+
+		<!-- the database name -->
+		<property name="hibernate.connection.url">jdbc:mysql://localhost:3306/db_commerce</property>
+		<property name="hibernate.connection.username">root</property>
+		<property name="hibernate.connection.password">root</property>
+
+		<property name="hbm2ddl.auto">create-drop</property>
+		<property name="show_sql">true</property>
+		<property name="hibernate.format_sql">true</property>
+		<property name="hibernate.id.new_generator_mappings">true</property>
+		<property name="hibernate.jndi.class">javax.naming.InitialContext</property>
+		<property name="hibernate.jndi.url">javax.naming.Context.PROVIDER_URL</property>
+		<property name="hibernate.connection.provider_class" >org.hibernate.hikaricp.internal.HikariCPConnectionProvider</property>
+		<property name="hibernate.current_session_context_class"  >thread</property>
+		<property name="hibernate.use_outer_join" >true</property>
+		<property name="hibernate.jdbc.use_streams_for_binary">true</property>
+		
+		<!-- List of POJO class mapping files -->
+		<mapping class="za.co.fynbos.model.Product" />
+		<mapping class="za.co.fynbos.model.Brand" />
+		<mapping class="za.co.fynbos.model.Category" />
+		<mapping class="za.co.fynbos.model.Customer" />
+		<mapping class="za.co.fynbos.model.ProductImage" />
+	</session-factory>
+</hibernate-configuration>

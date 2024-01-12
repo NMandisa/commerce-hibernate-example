@@ -28,7 +28,7 @@ public class Product implements Serializable {
 
 	
 	@Id
-	@SequenceGenerator(name = "product_generator", sequenceName = "product_sequence", allocationSize = 1,initialValue = 10)
+	@SequenceGenerator(name = "product_generator", sequenceName = "sequence_product", allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "product_generator")
 	@Column(name = "product_id")
 	private Long productId;
@@ -47,12 +47,12 @@ public class Product implements Serializable {
 	@CollectionTable(name = "product_images",joinColumns =@JoinColumn(name="product_id"))
 	private Collection<ProductImage>productImages;
 
-	@ManyToMany
-	@JoinTable(
+	@ManyToMany(mappedBy = "products")
+	/*@JoinTable(
 			name = "products_has_brands",
-			joinColumns = @JoinColumn(name = "brand_product_id", referencedColumnName = "product_id"),
+			joinColumns = @JoinColumn(name = "product_id", referencedColumnName = "product_id"),
 			inverseJoinColumns = @JoinColumn(name = "brand_id", referencedColumnName = "brand_id",foreignKey=@ForeignKey(name = "product_brand_fk"))
-	)
+	)*/
 	private List<Brand> brands ;
 
 

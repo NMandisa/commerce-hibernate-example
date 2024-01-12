@@ -19,16 +19,16 @@ import lombok.*;
 @AllArgsConstructor
 @Entity
 @NamedEntityGraph(
-		name = "Category.products",
+		name = "category_products_entity_graph",
 		attributeNodes = {
 				@NamedAttributeNode("products")
 		}
 )
-@Table(name = "category", schema = "commerce")
+@Table(name = "category")
 public class Category implements Serializable{
 	
 	@Id
-	@SequenceGenerator(name = "category_generator", sequenceName = "category_sequence", allocationSize = 1,initialValue = 10)
+	@SequenceGenerator(name = "category_generator", sequenceName = "sequence_category", allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "category_generator")
 	@Column(name = "category_id")
 	private Long categoryId;
@@ -41,17 +41,16 @@ public class Category implements Serializable{
 			orphanRemoval = true
 	)
 	private List<Product> products = new ArrayList<>();
-
 	@OneToMany(
 			cascade={CascadeType.PERSIST, CascadeType.REMOVE},
 			orphanRemoval = true
 	)
 	@JoinColumn(name = "category_id" )
-	@JoinTable(
+	/*@JoinTable(
 			name = "category_has_categories",
 			joinColumns = @JoinColumn(name = "parent_category_id", referencedColumnName = "category_id"),
 			inverseJoinColumns = @JoinColumn(name = "child_category_id", referencedColumnName = "category_id",foreignKey=@ForeignKey(name = "categories_category_fk")
-			))
+			))*/
 	private Set<Category> categories = new HashSet<>();
 
 
@@ -87,7 +86,7 @@ public class Category implements Serializable{
 	}
 
 	public void addCategories(HashSet<Category>childCategories){
-		categories.addAll(retriveCategories(childCategories));
+		categories.addAll(childCategories);
 		this.setCategories(categories);
 	}
 
