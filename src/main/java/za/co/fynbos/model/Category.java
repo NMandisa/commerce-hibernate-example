@@ -24,11 +24,11 @@ import lombok.*;
 				@NamedAttributeNode("products")
 		}
 )
-@Table(name = "category")
+@Table(name = "category",schema = "db_commerce")
 public class Category implements Serializable{
 	
 	@Id
-	@SequenceGenerator(name = "category_generator", sequenceName = "sequence_category", allocationSize = 1)
+	@SequenceGenerator(name = "category_generator", sequenceName = "sequence_category_id", allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "category_generator")
 	@Column(name = "category_id")
 	private Long categoryId;
@@ -45,12 +45,12 @@ public class Category implements Serializable{
 			cascade={CascadeType.PERSIST, CascadeType.REMOVE},
 			orphanRemoval = true
 	)
-	@JoinColumn(name = "category_id" )
-	/*@JoinTable(
+	//@JoinColumn(name = "category_id" )
+	@JoinTable(
 			name = "category_has_categories",
 			joinColumns = @JoinColumn(name = "parent_category_id", referencedColumnName = "category_id"),
 			inverseJoinColumns = @JoinColumn(name = "child_category_id", referencedColumnName = "category_id",foreignKey=@ForeignKey(name = "categories_category_fk")
-			))*/
+			))
 	private Set<Category> categories = new HashSet<>();
 
 
@@ -64,10 +64,6 @@ public class Category implements Serializable{
 
 	public Category getCategory(Category category){
 		return category;
-	}
-
-	public Set<Category> retriveCategories( HashSet<Category> existingCategories){
-		return this.categories = existingCategories;
 	}
 
 	public void addProduct(Product product){
@@ -85,7 +81,7 @@ public class Category implements Serializable{
 		category.getCategory(category);
 	}
 
-	public void addCategories(HashSet<Category>childCategories){
+	public void addCategories(Set<Category>childCategories){
 		categories.addAll(childCategories);
 		this.setCategories(categories);
 	}

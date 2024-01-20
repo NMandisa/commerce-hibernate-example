@@ -9,11 +9,11 @@ import lombok.*;
 @Getter
 @Setter
 @Entity
-@Table(name = "customer")
+@Table(name = "customer",schema = "db_commerce")
 public class Customer {
 
     @Id
-    @SequenceGenerator(name = "customer_generator", sequenceName = "customer_sequence", allocationSize = 1, initialValue = 11101)
+    @SequenceGenerator(name = "customer_generator", sequenceName = "sequence_customer_id", allocationSize = 1, initialValue = 11101)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "customer_generator")
     @Column(name = "customer_id")
     private Long customerId;

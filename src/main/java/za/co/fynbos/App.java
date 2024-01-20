@@ -2,11 +2,10 @@ package za.co.fynbos;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import za.co.fynbos.model.Address;
 import za.co.fynbos.model.Category;
 import za.co.fynbos.model.Customer;
@@ -19,14 +18,11 @@ import za.co.fynbos.util.HibernateUtil;
  */
 public class App 
 {
-	private final static Logger LOGGER = Logger.getLogger(App.class.getName());
+	private static final Logger LOGGER = LoggerFactory.getLogger(App.class.getName());
     public static void main( String[] args )
     {
-    	
        // System.out.println( "Hello World!" );
         //This code will make you dizzy, It made me dizzy just writing it... My Hibernate Practical Example
-        LOGGER.log(Level.INFO,"Main Test", App.class);
-
         Session session = HibernateUtil.getSessionFactory().openSession();
         Transaction txn = session.getTransaction();
         try {
@@ -59,7 +55,7 @@ public class App
             categories.add(category1);
             categories.add(category2);
             categories.add(childCategory);
-            parentCategory.addCategories((HashSet<Category>) categories);//adding a list of categories
+            parentCategory.addCategories(categories);//adding a list of categories
 
 
 
@@ -72,21 +68,15 @@ public class App
 
 
             session.persist(customer);//testing address embedded
-            session.persist(category1);//test products to categories
+            //session.persist(category1);//test products to categories
             session.persist(category2);
             session.persist(parentCategory);//test categories parent child relationship
             session.persist(parentCategory1);//test categories parent child relationship
 
             txn.commit();
         }	catch(Exception e) {
-            if(txn != null) { txn.rollback(); }
+            txn.rollback();
             e.printStackTrace();
-        }	finally {
-            if(session != null) { session.close(); }
+        }	finally {session.close(); }
         }
-        
-
-        
-       // LOGGER.log(Level.INFO,"...................", App.class);
-    }
 }

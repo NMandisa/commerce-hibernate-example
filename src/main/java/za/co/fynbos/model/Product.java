@@ -5,8 +5,8 @@ package za.co.fynbos.model;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -23,12 +23,12 @@ import org.hibernate.annotations.UpdateTimestamp;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "product", schema = "commerce")
+@Table(name = "product", schema = "db_commerce")
 public class Product implements Serializable {
 
 	
 	@Id
-	@SequenceGenerator(name = "product_generator", sequenceName = "sequence_product", allocationSize = 1)
+	@SequenceGenerator(name = "product_generator", sequenceName = "sequence_product_id", allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "product_generator")
 	@Column(name = "product_id")
 	private Long productId;
@@ -43,9 +43,13 @@ public class Product implements Serializable {
 	))
 	private Category category;
 
-	@ElementCollection
-	@CollectionTable(name = "product_images",joinColumns =@JoinColumn(name="product_id"))
-	private Collection<ProductImage>productImages;
+	@OneToMany
+	@JoinTable(
+			name = "product_has_product_images",
+			joinColumns = @JoinColumn(name = "product_id", referencedColumnName = "product_id"),
+			inverseJoinColumns = @JoinColumn(name = "product_image_id", referencedColumnName = "product_image_id",foreignKey=@ForeignKey(name = "product_image_id_fk")
+			))
+	private Set<ProductImage> productImages;
 
 	@ManyToMany(mappedBy = "products")
 	/*@JoinTable(
