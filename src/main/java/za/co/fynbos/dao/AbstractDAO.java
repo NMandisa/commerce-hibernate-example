@@ -10,7 +10,7 @@ import za.co.fynbos.util.JPAUtil;
 /**
  * @author Noxolo.Mkhungo
  */
-public abstract class AbstractDAO{
+public abstract class AbstractDAO {
     @PersistenceContext
     protected EntityManager entityManager = JPAUtil.getEntityManager();
     protected CriteriaBuilder cb = entityManager.getCriteriaBuilder();

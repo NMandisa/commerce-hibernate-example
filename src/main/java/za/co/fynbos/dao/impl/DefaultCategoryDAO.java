@@ -6,19 +6,16 @@ import jakarta.persistence.criteria.CriteriaUpdate;
 import jakarta.persistence.criteria.Root;
 import jakarta.transaction.Transactional;
 import za.co.fynbos.dao.AbstractDAO;
-import za.co.fynbos.dao.GlobalDAO;
+import za.co.fynbos.dao.GenericDAO;
 import za.co.fynbos.model.Category;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * @author Noxolo.Mkhungo
  */
 @Transactional
-public class DefaultCategoryDAO extends AbstractDAO implements GlobalDAO<Category> {
+public class DefaultCategoryDAO extends AbstractDAO implements GenericDAO<Category> {
     public void findById(Long categoryId) {
         TypedQuery<Category> typedQuery = entityManager.createNamedQuery("findByCategoryId", Category.class)
                 .setParameter("id", categoryId);
@@ -52,6 +49,13 @@ public class DefaultCategoryDAO extends AbstractDAO implements GlobalDAO<Categor
     public void save(Category category) {
         transaction.begin();
         entityManager.persist(category);
+        transaction.commit();
+    }
+
+    @Override
+    public void saveAll(Set<Category> categories) {
+        transaction.begin();
+        for(Category category: categories){entityManager.persist(category);}
         transaction.commit();
     }
 

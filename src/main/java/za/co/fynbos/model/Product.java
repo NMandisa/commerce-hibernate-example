@@ -66,14 +66,13 @@ public class Product implements Serializable {
 			))
 	private Set<ProductImage> productImages;
 
-	@ManyToMany(mappedBy = "products")
+	@ManyToMany(mappedBy = "products",cascade = CascadeType.ALL)
 	/*@JoinTable(
 			name = "products_has_brands",
 			joinColumns = @JoinColumn(name = "product_id", referencedColumnName = "product_id"),
 			inverseJoinColumns = @JoinColumn(name = "brand_id", referencedColumnName = "brand_id",foreignKey=@ForeignKey(name = "product_brand_fk"))
 	)*/
 	private List<Brand> brands ;
-
 
 	@Column(name = "date_created")
 	@CreationTimestamp
@@ -82,8 +81,6 @@ public class Product implements Serializable {
 	@Column(name = "last_updated")
 	@UpdateTimestamp
 	private LocalDateTime lastUpdated;
-
-
-
+	public Product(String productName){this.productName=productName;}
 
 }

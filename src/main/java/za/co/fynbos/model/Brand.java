@@ -4,7 +4,9 @@
 package za.co.fynbos.model;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -42,17 +44,25 @@ public class Brand implements Serializable {
 	@Column(name = "brand_description")
 	private String brandDescription;
 
-	@ManyToMany
+	@ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
 	@JoinTable(
 			name = "brands_has_products",
 			joinColumns = @JoinColumn(name = "brand_id", referencedColumnName = "brand_id"),
 			inverseJoinColumns = @JoinColumn(name = "product_id", referencedColumnName = "product_id",foreignKey=@ForeignKey(name = "product_id_fk"))
 	)
-	private List<Product>products ;
+	private Set<Product>products = new HashSet<>();
 
 	public  Brand( String brandName){
 		this.brandName=brandName;
 	}
 
-
+	public void addProduct(Product product){
+		products.add(product);
+		product.setBrands(List.of(this));
+	}
+	public void addProducts(Set<Product> addedProducts){
+		products.addAll(addedProducts);
+		for(Product product: addedProducts)
+		{product.setBrands(List.of(this));}
+	}
 }
