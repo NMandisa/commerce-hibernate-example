@@ -17,6 +17,7 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 @Entity
 @NamedEntityGraph(
 		name = "category_products_entity_graph",
@@ -44,7 +45,7 @@ public class Category implements Serializable{
 			cascade={CascadeType.PERSIST, CascadeType.REMOVE},
 			orphanRemoval = true
 	)
-	private List<Product> products = new ArrayList<>();
+	private Set<Product> products = new HashSet<>();
 	@OneToMany(
 			cascade={CascadeType.PERSIST, CascadeType.REMOVE},
 			orphanRemoval = true
@@ -62,7 +63,7 @@ public class Category implements Serializable{
 		return  categories;
 	}
 
-	public List<Product> getProducts(){
+	public Set<Product> getProducts(){
 		return products;
 	}
 

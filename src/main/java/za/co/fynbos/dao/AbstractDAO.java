@@ -1,6 +1,7 @@
 package za.co.fynbos.dao;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import za.co.fynbos.util.JPAUtil;
@@ -13,4 +14,6 @@ public abstract class AbstractDAO{
     @PersistenceContext
     protected EntityManager entityManager = JPAUtil.getEntityManager();
     protected CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+
+    protected EntityTransaction transaction = JPAUtil.getEntityTransaction();
 }
