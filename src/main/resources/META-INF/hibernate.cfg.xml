@@ -19,8 +19,6 @@
 		<property name="show_sql">true</property>
 		<property name="hibernate.format_sql">true</property>
 		<property name="hibernate.id.new_generator_mappings">true</property>
-		<property name="hibernate.jndi.class">javax.naming.InitialContext</property>
-		<property name="hibernate.jndi.url">javax.naming.Context.PROVIDER_URL</property>
 		<property name="hibernate.connection.provider_class" >org.hibernate.hikaricp.internal.HikariCPConnectionProvider</property>
 		<property name="hibernate.current_session_context_class"  >thread</property>
 		<property name="hibernate.use_outer_join" >true</property>

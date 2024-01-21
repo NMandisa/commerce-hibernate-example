@@ -28,18 +28,14 @@ public class Customer {
     private Address address;
 
     @Embedded
-    @AttributeOverrides( {
-            @AttributeOverride(name="street", column=@Column(name="home_street")),
-            @AttributeOverride(name="city", column=@Column(name="home_city")),
-            @AttributeOverride(name="zipcode", column=@Column(name="home_zipcode"))
-    } )
+    @AttributeOverride(name="street", column=@Column(name="home_street"))
+    @AttributeOverride(name="city", column=@Column(name="home_city"))
+    @AttributeOverride(name="zipcode", column=@Column(name="home_zipcode"))
     private Address homeAddress;
 
     @Embedded
-    @AttributeOverrides( {
-            @AttributeOverride(name="street", column=@Column(name="billing_street")),
-            @AttributeOverride(name="city", column=@Column(name="billing_city")),
-            @AttributeOverride(name="zipcode", column=@Column(name="billing_zipcode"))
-    } )
+    @AttributeOverride(name="street", column=@Column(name="billing_street"))
+    @AttributeOverride(name="city", column=@Column(name="billing_city"))
+    @AttributeOverride(name="zipcode", column=@Column(name="billing_zipcode"))
     private Address billingAddress;
 }

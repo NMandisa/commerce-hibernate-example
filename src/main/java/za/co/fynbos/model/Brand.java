@@ -19,6 +19,14 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@NamedNativeQuery(
+		name = "Brand.findByDescription",
+		query = "select * from db_commerce.brand b where b.brand_description = :description",
+		resultClass = Product.class)
+@NamedNativeQuery(
+		name = "Brand.findAllOrderByNameDESC",
+		query = "select * from db_commerce.brand order by brand_name DESC",
+		resultClass = Product.class)
 @Table(name = "brand", schema = "db_commerce")
 public class Brand implements Serializable {
 	
@@ -30,6 +38,9 @@ public class Brand implements Serializable {
 
 	@Column(name = "brand_name")
 	private String brandName;
+
+	@Column(name = "brand_description")
+	private String brandDescription;
 
 	@ManyToMany
 	@JoinTable(

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-mappings xmlns="https://jakarta.ee/xml/ns/persistence/orm" version="3.0">
+	<package>za.co.fynbos.model</package>
+	<entity class="za.co.fynbos.model.Category">
+		<named-query name="findByCategoryName">
+			<query>
+				<![CDATA[select c from Category c where c.categoryName = :name]]>
+			</query>
+		</named-query>
+		<named-query name="findByCategoryId">
+			<query>
+				<![CDATA[select c from Category c where c.categoryId = :id]]>
+			</query>
+		</named-query>
+	</entity>
+</entity-mappings>

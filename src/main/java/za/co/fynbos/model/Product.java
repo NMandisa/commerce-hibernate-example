@@ -23,6 +23,21 @@ import org.hibernate.annotations.UpdateTimestamp;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@NamedEntityGraph(
+		name = "product_brands_entity_graph",
+		attributeNodes = {@NamedAttributeNode("brands")})
+@NamedEntityGraph(
+		name = "product_images_entity_graph",
+		attributeNodes = {@NamedAttributeNode("productImages")})
+@NamedQuery(
+		name = "Product.findAllOrderByProductNameDesc",
+		query = "SELECT p from Product p ORDER By p.productName DESC")
+@NamedQuery(
+		name = "Product.findAllOrderByProductNameASC",
+		query = "SELECT p from Product p ORDER By p.productName ASC")
+@NamedQuery(
+		name = "Product.findById",
+		query = "SELECT p from Product p where p.id = :id")
 @Table(name = "product", schema = "db_commerce")
 public class Product implements Serializable {
 

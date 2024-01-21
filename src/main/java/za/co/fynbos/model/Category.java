@@ -22,8 +22,12 @@ import lombok.*;
 		name = "category_products_entity_graph",
 		attributeNodes = {
 				@NamedAttributeNode("products")
-		}
-)
+		})
+@NamedEntityGraph(
+		name = "category_categories_entity_graph",
+		attributeNodes = {
+				@NamedAttributeNode("categories")
+		})
 @Table(name = "category",schema = "db_commerce")
 public class Category implements Serializable{
 	
