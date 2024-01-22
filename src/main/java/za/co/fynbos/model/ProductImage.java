@@ -19,6 +19,13 @@ public class ProductImage implements Serializable {
 
     @Column(name = "product_image_url")
     private String productImageUrl;
+    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "product_has_product_images",
+            joinColumns = @JoinColumn(name = "product_image_id", referencedColumnName = "product_image_id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id", referencedColumnName = "product_id",foreignKey=@ForeignKey(name = "product_id_fk")
+            ))
+    private Product product;
 
     public  ProductImage(String productImageUrl){
         this.productImageUrl=productImageUrl;

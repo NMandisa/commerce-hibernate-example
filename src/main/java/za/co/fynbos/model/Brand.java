@@ -5,7 +5,6 @@ package za.co.fynbos.model;
 
 import java.io.Serializable;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import jakarta.persistence.*;
@@ -44,25 +43,38 @@ public class Brand implements Serializable {
 	@Column(name = "brand_description")
 	private String brandDescription;
 
-	@ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+	@ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.PERSIST)
 	@JoinTable(
 			name = "brands_has_products",
 			joinColumns = @JoinColumn(name = "brand_id", referencedColumnName = "brand_id"),
 			inverseJoinColumns = @JoinColumn(name = "product_id", referencedColumnName = "product_id",foreignKey=@ForeignKey(name = "product_id_fk"))
 	)
 	private Set<Product>products = new HashSet<>();
+	/*public void setProduct(Product product){
+		this.addProduct(product);
+	}*/
 
 	public  Brand( String brandName){
 		this.brandName=brandName;
 	}
-
 	public void addProduct(Product product){
 		products.add(product);
-		product.setBrands(List.of(this));
+		for(Product addedproduct: products)
+		{addedproduct.setBrands(Set.of(this));}
 	}
-	public void addProducts(Set<Product> addedProducts){
-		products.addAll(addedProducts);
-		for(Product product: addedProducts)
-		{product.setBrands(List.of(this));}
+	public void removeProduct(Product product){
+		products.remove(product);
+		product.addBrand(null);
+	}
+	public void addProducts(Set<Product> addProducts){
+		products.addAll(addProducts);
+		for(Product product: addProducts)
+		{product.setBrands(Set.of(this));}
+	}
+	public void removeProducts(Set<Product> removeLProducts){
+		products.removeAll(removeLProducts);
+		for (Product product:removeLProducts){
+			product.setBrands(null);
+		}
 	}
 }

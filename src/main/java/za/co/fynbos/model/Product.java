@@ -5,7 +5,7 @@ package za.co.fynbos.model;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Set;
 
 import jakarta.persistence.*;
@@ -40,7 +40,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 		query = "SELECT p from Product p where p.id = :id")
 @Table(name = "product", schema = "db_commerce")
 public class Product implements Serializable {
-
 	
 	@Id
 	@SequenceGenerator(name = "product_generator", sequenceName = "sequence_product_id", allocationSize = 1)
@@ -49,6 +48,8 @@ public class Product implements Serializable {
 	private Long productId;
 	@Column(name = "product_name")
 	private String productName;
+	@Column(name = "product_price")
+	private double productPrice;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinTable(
@@ -58,21 +59,16 @@ public class Product implements Serializable {
 	))
 	private Category category;
 
-	@OneToMany
-	@JoinTable(
-			name = "product_has_product_images",
-			joinColumns = @JoinColumn(name = "product_id", referencedColumnName = "product_id"),
-			inverseJoinColumns = @JoinColumn(name = "product_image_id", referencedColumnName = "product_image_id",foreignKey=@ForeignKey(name = "product_image_id_fk")
-			))
+	@OneToMany(mappedBy = "product",cascade = CascadeType.ALL,fetch = FetchType.LAZY,orphanRemoval = true)
 	private Set<ProductImage> productImages;
 
-	@ManyToMany(mappedBy = "products",cascade = CascadeType.ALL)
+	@ManyToMany(mappedBy = "products",fetch = FetchType.LAZY,cascade = CascadeType.PERSIST)
 	/*@JoinTable(
 			name = "products_has_brands",
 			joinColumns = @JoinColumn(name = "product_id", referencedColumnName = "product_id"),
 			inverseJoinColumns = @JoinColumn(name = "brand_id", referencedColumnName = "brand_id",foreignKey=@ForeignKey(name = "product_brand_fk"))
 	)*/
-	private List<Brand> brands ;
+	private Set<Brand> brands = new HashSet<>();
 
 	@Column(name = "date_created")
 	@CreationTimestamp
@@ -82,5 +78,13 @@ public class Product implements Serializable {
 	@UpdateTimestamp
 	private LocalDateTime lastUpdated;
 	public Product(String productName){this.productName=productName;}
+	public void addBrand(Brand brand){
+		brands.add(brand);
+		brand.setProducts(Set.of(this));
+	}
+	public void removeBrand(Brand brand){
+		brands.remove(brand);
+		brand.setProducts(Set.of(null));
+	}
 
 }

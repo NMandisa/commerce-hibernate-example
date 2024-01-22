@@ -17,7 +17,6 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 @Entity
 @NamedEntityGraph(
 		name = "category_products_entity_graph",
@@ -94,5 +93,9 @@ public class Category implements Serializable{
 	public void removeCategory(Category category){
 		categories.remove(category);
 		category.getCategory(null);
+	}
+	public String toString(){
+		return "Category id : "+categoryId+" category name : "+ categoryName +"\n products :"+products.toString()+"\n child categories :"+categories.toString();
+		//return "Category id"+categoryId+" category name "+ categoryName +" products "+products.iterator().next().toString()+" child categories "+categories.iterator().next().toString();
 	}
 }

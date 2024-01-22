@@ -1,8 +1,11 @@
 package za.co.fynbos.dao.impl;
 
+import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.*;
 import jakarta.transaction.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import za.co.fynbos.dao.AbstractDAO;
 import za.co.fynbos.dao.GenericDAO;
 import za.co.fynbos.model.Brand;
@@ -16,6 +19,7 @@ import java.util.Set;
  */
 @Transactional
 public class DefaultBrandDAO extends AbstractDAO implements GenericDAO<Brand> {
+    private static final Logger LOGGER = LoggerFactory.getLogger(DefaultBrandDAO.class.getName());
     //Working in Progress... (Partially working)!
     public List<Brand> findBrands() {
         CriteriaQuery<Brand> criteria = cb.createQuery(Brand.class);
@@ -24,7 +28,7 @@ public class DefaultBrandDAO extends AbstractDAO implements GenericDAO<Brand> {
         TypedQuery<Brand> query = entityManager.createQuery(criteria);
         return query.getResultList();
     }
-    public List<Brand> findBrandByBrandName(String brandName){
+    public List<Brand> findBrandByName(String brandName){
         CriteriaQuery<Brand> criteriaQuery = cb.createQuery(Brand.class);
         Root<Brand> brand = criteriaQuery.from( Brand.class );
         Predicate brandNamePredicate = cb.like(brand.get("brand_name"), "%" + brandName + "%");
@@ -38,35 +42,33 @@ public class DefaultBrandDAO extends AbstractDAO implements GenericDAO<Brand> {
     }
 
     //Alternatively use Native Query
-    /*public List<Brand> findBrandList() {
+    public List<Brand> findBrandList() {
             Query query = entityManager.createNativeQuery("select * from brand", Brand.class);
             List<Brand> brands = query.getResultList();
             for (Brand returnedbrand : brands){
                 System.out.println(returnedbrand.toString());
             }
             return brands;
-      }*/
+      }
 
     @Override
     public void save(Brand brand) {
         transaction.begin();
         entityManager.persist(brand);
         transaction.commit();
+        //return the saved brand logic pending
     }
     @Override
     public void saveAll(Set<Brand> brands) {
-        transaction.begin();
-        for(Brand brand: brands){entityManager.persist(brand);}
-        transaction.commit();
+        for(Brand brand: brands){save(brand);}
+        //return the List of all saved brand logic pending
     }
 
     @Override
-    public Optional<Brand> find(Long id) {
-        return Optional.empty();
-    }
+    public Optional<Brand> find(Long id) {return Optional.empty();}
 
     @Override
-    public Brand delete(Long brandId) {
+    public boolean delete(Long brandId) {
         // create delete
         CriteriaDelete<Brand> delete = cb.createCriteriaDelete(Brand.class);
         // set the root class
@@ -76,8 +78,16 @@ public class DefaultBrandDAO extends AbstractDAO implements GenericDAO<Brand> {
         delete.where(brandIdPredicate);
         // perform update
         entityManager.createQuery(delete).executeUpdate();
-        return null;
+        return false;
     }
+
+    @Override
+    public boolean deleteAll(Set<Brand> brands) {
+        for (Brand deleteBrand : brands)
+        {delete(deleteBrand.getBrandId());}
+        return false;//pending...
+    }
+
     List<Brand> findBrandsByNameAndDescription(String brandName, String brandDescription) {
         CriteriaQuery<Brand> criteriaQuery = cb.createQuery(Brand.class);
         // set the root class
@@ -91,17 +101,29 @@ public class DefaultBrandDAO extends AbstractDAO implements GenericDAO<Brand> {
         return query.getResultList();
     }
     @Override
-    public Brand edit(Long brandId,Brand edit) {
+    public boolean edit(Long brandId,Brand edit) {
         CriteriaUpdate<Brand> update = cb.createCriteriaUpdate(Brand.class);
         // set the root class
         Root<Brand> brand = update.from(Brand.class);
         // set update and where clause
         Predicate brandIdPredicate = cb.equal(brand.get("brand_id"),brandId);
         update.set("brand_name", edit.getBrandName());
+        update.set("brand_description", edit.getBrandDescription());
         // set where clause
         update.where(brandIdPredicate);
         // perform update
         entityManager.createQuery(update).executeUpdate();
-        return null;
+        return true;
+    }
+
+    @Override
+    public boolean editAll(Set<Brand> oldBrands,Set<Brand> newBrands) {
+        for (Brand oldBrand : oldBrands){
+            Long brandId = oldBrand.getBrandId();
+            for (Brand newBrand : newBrands){
+                edit(brandId,newBrand);//Validations pending...
+            }
+        }
+        return true;
     }
 }
