@@ -1,24 +1,22 @@
 package za.co.fynbos.dao.impl;
 
-import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.*;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import za.co.fynbos.dao.AbstractDAO;
-import za.co.fynbos.dao.GenericDAO;
+import za.co.fynbos.dao.BrandDAO;
 import za.co.fynbos.model.Brand;
+import za.co.fynbos.model.Product;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author Noxolo.Mkhungo
  */
 @Transactional
-public class DefaultBrandDAO extends AbstractDAO implements GenericDAO<Brand> {
+public class DefaultBrandDAO extends AbstractDAO implements BrandDAO {
     private static final Logger LOGGER = LoggerFactory.getLogger(DefaultBrandDAO.class.getName());
     //Working in Progress... (Partially working)!
     public List<Brand> findBrands() {
@@ -41,15 +39,16 @@ public class DefaultBrandDAO extends AbstractDAO implements GenericDAO<Brand> {
         return brands;
     }
 
-    //Alternatively use Native Query
-    public List<Brand> findBrandList() {
-            Query query = entityManager.createNativeQuery("select * from brand", Brand.class);
-            List<Brand> brands = query.getResultList();
-            for (Brand returnedbrand : brands){
-                System.out.println(returnedbrand.toString());
-            }
-            return brands;
-      }
+    public Brand findBrandEntityGraph(Long brandId) {
+        Map<String, Object> props = new HashMap<>();
+        props.put("jakarta.persistence.loadgraph",entityManager.getEntityGraph("brand_products_entity_graph"));
+        Brand brand =   entityManager.find(Brand.class, brandId, props);
+        System.out.println(brand.toString());
+        for (Product product: brand.getProducts()){
+            System.out.println(brand.getBrandName()+" Brand Product :"+product.toString());
+        }
+        return brand;
+    }
 
     @Override
     public void save(Brand brand) {
@@ -65,8 +64,7 @@ public class DefaultBrandDAO extends AbstractDAO implements GenericDAO<Brand> {
     }
 
     @Override
-    public Optional<Brand> find(Long id) {return Optional.empty();}
-
+    public Brand find(Long id) {return entityManager.find(Brand.class,id);}
     @Override
     public boolean delete(Long brandId) {
         // create delete

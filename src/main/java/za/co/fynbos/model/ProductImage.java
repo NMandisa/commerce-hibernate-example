@@ -2,6 +2,8 @@ package za.co.fynbos.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.io.Serializable;
 
@@ -29,5 +31,17 @@ public class ProductImage implements Serializable {
 
     public  ProductImage(String productImageUrl){
         this.productImageUrl=productImageUrl;
+    }
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder().append(productImageId).toHashCode();
+    }
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof ProductImage other)) return false;
+        return new EqualsBuilder().append(productImageId, other.productImageId).isEquals();
+    }
+    public String toString(){
+        return "product image Id : "+productImageId+" product image url: "+ productImageUrl +"\n product : "+product.toString()+"\n";
     }
 }

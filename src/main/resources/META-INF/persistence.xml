@@ -7,6 +7,18 @@
 		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 		<mapping-file>orm.xml</mapping-file>
 		<properties>
+			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
+			<property name="hibernate.connection.driver_class" value="com.mysql.cj.jdbc.Driver"/>
+			<property name="hibernate.connection.isolation" value="8"/>
+			<property name="hibernate.connection.username" value="root"/>
+			<property name="hibernate.connection.root" value="root"/>
+			<property name="hibernate.hbm2ddl.auto" value="update"/>
+			<property name="hibernate.show_sql" value="true"/>
+			<property name="hibernate.generate_statistics" value="true"/>
+			<property name="hibernate.order_updates" value="true"/>
+			<property name="hibernate.jdbc.batch_versioned_data" value="true"/>
+			<property name="hibernate.default_batch_fetch_size" value="10"/>
+			<property name="format_sql" value="true"/>
 			<property name="connection.provider_class" value="org.hibernate.hikaricp.internal.HikariCPConnectionProvider"/>
 		</properties>
 	</persistence-unit>

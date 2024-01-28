@@ -1,15 +1,13 @@
 package za.co.fynbos.dao.impl;
 
 import jakarta.persistence.TypedQuery;
-import jakarta.persistence.criteria.CriteriaDelete;
-import jakarta.persistence.criteria.CriteriaUpdate;
-import jakarta.persistence.criteria.Predicate;
-import jakarta.persistence.criteria.Root;
+import jakarta.persistence.criteria.*;
 import jakarta.transaction.Transactional;
+import lombok.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import za.co.fynbos.dao.AbstractDAO;
-import za.co.fynbos.dao.GenericDAO;
+import za.co.fynbos.dao.CategoryDAO;
 import za.co.fynbos.model.Category;
 
 import java.util.*;
@@ -18,13 +16,16 @@ import java.util.*;
  * @author Noxolo.Mkhungo
  */
 @Transactional
-public class DefaultCategoryDAO extends AbstractDAO implements GenericDAO<Category> {
+public class DefaultCategoryDAO extends AbstractDAO implements CategoryDAO {
     @SuppressWarnings("unused")
     private static final Logger LOGGER = LoggerFactory.getLogger(DefaultCategoryDAO.class.getName());
-    public void findById(Long categoryId) {
+    //https://www.baeldung.com/hibernate-criteria-queries
+    //https://www.baeldung.com/hibernate-fetchmode
+    //https://mikekowdley.medium.com/hibernate-criteriaquery-fetching-a-partial-entity-and-child-with-joins-984987545dd2
+    public Category findById(Long categoryId) {
         TypedQuery<Category> typedQuery = entityManager.createNamedQuery("findByCategoryId", Category.class)
                 .setParameter("id", categoryId);
-        List<Category> categories = typedQuery.getResultList();//Need to work on this later
+        return typedQuery.getSingleResult();
     }
 
     public List<Category> findByCategoryName(String categoryName) {
@@ -51,26 +52,27 @@ public class DefaultCategoryDAO extends AbstractDAO implements GenericDAO<Catego
 										.setHint("jakarta.persistence.loadgraph", entityManager.getEntityGraph("category_products_entity_graph"))
 										.getSingleResult();
     }
-
+    @Transactional
     @Override
     public void save(Category category) {
+
         transaction.begin();
         entityManager.persist(category);
         transaction.commit();
         //return the saved category logic pending
     }
-
+    @Transactional
     @Override
     public void saveAll(Set<Category> categories) {
-        for(Category category: categories){save(category);}
+        //uses persistence context and is taxing to db
+        //for(Category category: categories){save(category);}
         //return the list of saved categories logic pending
+        //batch save should be a direct db write not loaded to persistence context-performance degradation
     }
-
     @Override
-    public Optional<Category> find(Long id) {//Need to work on this later not done
-        return Optional.empty();
+    public Category find(Long id) {
+        return entityManager.find(Category.class,id);
     }
-
     @Override
     public boolean delete(Long categoryId) {
         // create delete
@@ -78,19 +80,16 @@ public class DefaultCategoryDAO extends AbstractDAO implements GenericDAO<Catego
         // set the root class
         Root<Category> category = delete.from(Category.class);
         // set where clause
-        delete.where(cb.lessThanOrEqualTo(category.get("category_id"), categoryId));
+        delete.where(cb.equal(category.get("category_id"),categoryId));
         // perform update
-        entityManager.createQuery(delete).executeUpdate();
-        return true;
+        int affectRow = entityManager.createQuery(delete).executeUpdate();
+        return affectRow == 1;
     }
-
     @Override
-    public boolean deleteAll(Set<Category> categories) {
-        if(categories.isEmpty()){
-            for(Category category: categories) {
-                delete(category.getCategoryId());
-            }
-        }
+    public boolean deleteAll(@NonNull Set<Category> categories) {
+       // for(Category category: categories) {
+          //  delete(category.getCategoryId());}
+        //should be a direct db write not loaded to persistence context
         return true;//add validations pending...
     }
 
@@ -101,24 +100,18 @@ public class DefaultCategoryDAO extends AbstractDAO implements GenericDAO<Catego
         // set the root class
         Root<Category> category = update.from(Category.class);
         // set update and where clause
-        Predicate categoryIdPredicate = cb.equal(category.get("category_id"),categoryId);
         update.set("category_name", editCategory.getCategoryName());
-        update.where(categoryIdPredicate);
+        update.where(cb.equal(category.get("category_id"),categoryId));
         // perform update
         int rowUpdated = entityManager.createQuery(update).executeUpdate();
         return rowUpdated == 1;//the affected row is 1 than update was successful
     }
-
     @Override
-    public boolean editAll(Set<Category> oldCategories,Set<Category> categories) {
+    public boolean editAll(@NonNull Set<Category> oldCategories,@NonNull Set<Category> categories) {
         for(Category oldCategory : oldCategories)
-        {
-            Long id = oldCategory.getCategoryId();
+        {Long id = oldCategory.getCategoryId();
             for(Category category : categories)
-            {
-                edit(id,category);//validations pending...
-            }
-        }
-        return false;
-    }
+            {edit(id,category);//validations pending...
+            }}
+        return false;}
 }
