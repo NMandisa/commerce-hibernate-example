@@ -5,7 +5,8 @@ package za.co.fynbos.model;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -28,7 +29,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 @Entity
 @NamedEntityGraph(
 		name = "product_images_brand_entity_graph",
-		attributeNodes = {@NamedAttributeNode("productImages"), @NamedAttributeNode("brand")})
+		attributeNodes = {@NamedAttributeNode("images"), @NamedAttributeNode("brand")})
 @NamedQuery(
 		name = "Product.findAllOrderByProductNameDesc",
 		query = "SELECT p from Product p ORDER By p.productName DESC")
@@ -63,7 +64,7 @@ public class Product implements Serializable {
 
 	@OneToMany(mappedBy = "product",cascade = CascadeType.ALL,fetch = FetchType.LAZY,orphanRemoval = true)
 	@Fetch(FetchMode.SUBSELECT)
-	private Set<ProductImage> productImages;
+	private List<ProductImage> images= new ArrayList<>();
 
 	//@ManyToMany(mappedBy = "products",fetch = FetchType.LAZY,cascade = CascadeType.PERSIST)
 	//@Fetch(FetchMode.SUBSELECT)
@@ -104,6 +105,15 @@ public class Product implements Serializable {
 		brand.setProducts(Set.of());
 	}*/
 
+	public void addImage(ProductImage image){
+		images.add(image);
+		image.setProduct(this);
+	}
+	public void removeImage(ProductImage image){
+		images.remove(image);
+		image.setProduct(null);
+	}
+
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder().append(productId).toHashCode();
@@ -123,6 +133,6 @@ public class Product implements Serializable {
 	public int hashCode() {return getClass().hashCode();}*/
 
 	public String toString(){
-		return "product id : "+productId+" product name : "+ productName +"\n product images : "+productImages.toString()+"\n  product price :"+productPrice+" last updated : "+lastUpdated+ " date created : " +dateCreated+ "\n brands :"+brand+"\n";
+		return "product id : "+productId+" product name : "+ productName +"\n product images : "+images.toString()+"\n  product price :"+productPrice+" last updated : "+lastUpdated+ " date created : " +dateCreated+ "\n brands :"+brand+"\n";
 	}
 }

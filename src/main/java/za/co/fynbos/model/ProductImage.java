@@ -17,10 +17,10 @@ public class ProductImage implements Serializable {
     @SequenceGenerator(name = "product_image_generator", sequenceName = "sequence_product_id", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "product_image_generator")
     @Column(name = "product_image_id")
-    private Long productImageId;
+    private Long imageId;
 
     @Column(name = "product_image_url")
-    private String productImageUrl;
+    private String imageUrl;
     @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     @JoinTable(
             name = "product_has_product_images",
@@ -29,19 +29,19 @@ public class ProductImage implements Serializable {
             ))
     private Product product;
 
-    public  ProductImage(String productImageUrl){
-        this.productImageUrl=productImageUrl;
+    public  ProductImage(String imageUrl){
+        this.imageUrl=imageUrl;
     }
     @Override
     public int hashCode() {
-        return new HashCodeBuilder().append(productImageId).toHashCode();
+        return new HashCodeBuilder().append(imageId).toHashCode();
     }
     @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof ProductImage other)) return false;
-        return new EqualsBuilder().append(productImageId, other.productImageId).isEquals();
+        return new EqualsBuilder().append(imageId, other.imageId).isEquals();
     }
     public String toString(){
-        return "product image Id : "+productImageId+" product image url: "+ productImageUrl +"\n product : "+product.toString()+"\n";
+        return "product image Id : "+imageId+" product image url: "+ imageUrl +"\n";
     }
 }

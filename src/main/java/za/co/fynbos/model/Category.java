@@ -45,7 +45,7 @@ public class Category implements Serializable{
 			orphanRemoval = true
 	)
 	@Fetch(FetchMode.SUBSELECT)
-	private Set<Product> products = new HashSet<>();
+	private List<Product> products = new ArrayList<>();
 	@OneToMany(
 			cascade={CascadeType.PERSIST, CascadeType.REMOVE,CascadeType.MERGE},fetch = FetchType.LAZY,
 			orphanRemoval = true
@@ -56,16 +56,16 @@ public class Category implements Serializable{
 			joinColumns = @JoinColumn(name = "parent_category_id", referencedColumnName = "category_id"),
 			inverseJoinColumns = @JoinColumn(name = "child_category_id", referencedColumnName = "category_id",foreignKey=@ForeignKey(name = "categories_category_fk")
 			))
-	private Set<Category> categories = new HashSet<>();
+	private List<Category> categories = new ArrayList<>();
 
 	public Category(String categoryName){
 		this.categoryName=categoryName;
 	}
-	public Set<Category> getCategories(){
+	public List<Category> getCategories(){
 		return  categories;
 	}
 
-	public Set<Product> getProducts(){
+	public List<Product> getProducts(){
 		return products;
 	}
 
@@ -90,7 +90,7 @@ public class Category implements Serializable{
 		category.getCategory(category);
 	}
 
-	public void addCategories(Set<Category>childCategories){
+	public void addCategories(List<Category>childCategories){
 		this.categories.addAll(childCategories);
 		this.setCategories(categories);
 	}

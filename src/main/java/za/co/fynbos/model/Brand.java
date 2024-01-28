@@ -4,8 +4,8 @@
 package za.co.fynbos.model;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -59,7 +59,7 @@ public class Brand implements Serializable {
 			joinColumns = @JoinColumn(name = "brand_id", referencedColumnName = "brand_id"),
 			inverseJoinColumns = @JoinColumn(name = "product_id", referencedColumnName = "product_id",foreignKey=@ForeignKey(name = "product_id_fk"))
 	)*/
-	private Set<Product>products = new HashSet<>();
+	private List<Product> products = new ArrayList<>();
 
 	public  Brand( String brandName){
 		this.brandName=brandName;

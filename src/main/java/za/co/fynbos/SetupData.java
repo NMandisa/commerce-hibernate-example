@@ -9,6 +9,8 @@ import za.co.fynbos.dao.impl.DefaultProductDAO;
 import za.co.fynbos.model.Brand;
 import za.co.fynbos.model.Category;
 import za.co.fynbos.model.Product;
+import za.co.fynbos.model.ProductImage;
+
 
 /**
  * @author Noxolo.Mkhungo
@@ -22,18 +24,20 @@ public class SetupData {
         Category womenCategory = new Category("Women");
         Category kidsCategory = new Category("Kids");
         Category toddlersCategory = new Category("Toddlers");
-        categoryDAO.save(menCategory);
-        categoryDAO.save(womenCategory);
-        categoryDAO.save(kidsCategory);
-        categoryDAO.save(toddlersCategory);
+
+        Category mensTop=new Category("Top");
         Category mensFormal= new Category("Formal");
         Category mensGrooming= new Category("Grooming");
         Category mensJackets= new Category("Jackets");
         Category mensBottom=new Category("Bottom");
-        categoryDAO.save(mensFormal);
-        categoryDAO.save(mensGrooming);
-        categoryDAO.save(mensJackets);
-        categoryDAO.save(mensBottom);
+        menCategory.addCategory(mensTop);
+        menCategory.addCategory(mensFormal);
+        menCategory.addCategory(mensGrooming);
+        menCategory.addCategory(mensJackets);
+        menCategory.addCategory(mensBottom);
+
+
+
         Category womenAccessories= new Category("Accessories");
         Category womenBeauty=new Category("Beauty");
         Category womenBottoms= new Category("Bottoms");
@@ -45,21 +49,28 @@ public class SetupData {
         Category womenSwimwear=new Category("Swim Wear");
         Category womenShoes=new Category("Shoes");
         Category womenTops=new Category("Tops");
-        categoryDAO.save(womenAccessories);
-        categoryDAO.save(womenBeauty);
-        categoryDAO.save(womenBottoms);
-        categoryDAO.save(womenDresses);
-        categoryDAO.save(womenJackets);
-        categoryDAO.save(womenCoats);
-        categoryDAO.save(womenLingerieSleepwear);
-        categoryDAO.save(womenSport);
-        categoryDAO.save(womenSwimwear);
-        categoryDAO.save(womenShoes);
-        categoryDAO.save(womenTops);
+        womenCategory.addCategory(womenAccessories);
+        womenCategory.addCategory(womenBeauty);
+        womenCategory.addCategory(womenBottoms);
+        womenCategory.addCategory(womenDresses);
+        womenCategory.addCategory(womenJackets);
+        womenCategory.addCategory(womenCoats);
+        womenCategory.addCategory(womenLingerieSleepwear);
+        womenCategory.addCategory(womenSport);
+        womenCategory.addCategory(womenSwimwear);
+        womenCategory.addCategory(womenShoes);
+        womenCategory.addCategory(womenTops);
+
         Category kidsBoysCategory =new Category("Boys");
         Category kidsGirlsCategory =new Category("Girls");
-        categoryDAO.save(kidsGirlsCategory);
-        categoryDAO.save(kidsBoysCategory);
+        kidsCategory.addCategory(kidsGirlsCategory);
+        kidsCategory.addCategory(kidsBoysCategory);
+
+        categoryDAO.save(menCategory);
+        categoryDAO.save(womenCategory);
+        categoryDAO.save(kidsCategory);
+        categoryDAO.save(toddlersCategory);
+
         //categoryDAO.saveAll(Set.of(menCategory,womenCategory,kidsCategory,toddlersCategory));
     }
     public void setProductData(){
@@ -133,19 +144,28 @@ public class SetupData {
         womenAccessoriesProduct3.setCategory(categoryDAO.find(109L));
         productDAO.save(womenAccessoriesProduct3);
     }
-
     public void setBrandData(){
         Brand brand =  new Brand("Rich Durban");
         brand.setBrandDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. " +
                 "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris n");
         Product brandProduct =new Product("Slim Fit Cotton Stretch T-shirt");
         brandProduct.setCategory(categoryDAO.find(119L));
+        brandProduct.setProductPrice(349.99D);
         brand.addProduct(brandProduct);
         brandDAO.save(brand);
         Brand brand2 =  new Brand("GreenBat");
         brand.setBrandDescription("Sport wear and basics");
         Product brand2Product =new Product("Denim Shorts");
         brand2Product.setCategory(categoryDAO.find(108L));
+        brand2Product.setProductPrice(649.99D);
+        ProductImage brand2ProductImage=new ProductImage("https://images/products/greenbat/1400/denim-shorts.jpg");
+        ProductImage brand2ProductImage2=new ProductImage("https://images/products/greenbat/550/denim-shorts.jpg");
+        ProductImage brand2ProductImage3=new ProductImage("https://images/products/greenbat/320/denim-shorts.jpg");
+        ProductImage brand2ProductImage4=new ProductImage("https://images/products/greenbat/75/denim-shorts.jpg");
+        brand2Product.addImage(brand2ProductImage);
+        brand2Product.addImage(brand2ProductImage2);
+        brand2Product.addImage(brand2ProductImage3);
+        brand2Product.addImage(brand2ProductImage4);
         brand2.addProduct(brand2Product);
         brandDAO.save(brand2);
         Brand brand3 =  new Brand("Southern Face");
@@ -165,6 +185,61 @@ public class SetupData {
         Brand brand8 = new Brand("Dando Apparels");
         //brand8.setBrandDescription("");
         brandDAO.save(brand8);
+    }
+
+    public void setBrandProduct(){
+        Product product = new Product("Tank Top");
+        Brand productBrand = new Brand("Ghetto.FRESH(R)");
+        product.setBrand(productBrand);
+        product.setCategory(categoryDAO.find(119L));
+
+        ProductImage image=new ProductImage("https://images/products/ghetto.fresh/1400/tank-top.jpg");
+        ProductImage image2=new ProductImage("https://images/products/ghetto.fresh/550/tank-top.jpg");
+        ProductImage image3=new ProductImage("https://images/products/ghetto.fresh/320/tank-top.jpg");
+        ProductImage image4=new ProductImage("https://images/products/ghetto.fresh/75/tank-top.jpg");
+        product.addImage(image);
+        product.addImage(image2);
+        product.addImage(image3);
+        product.addImage(image4);
+
+        Product product2 = new Product("Truck Pants");
+        Brand product2Brand = new Brand("Ghetto.FABULOUS(R)");
+        product2.setBrand(product2Brand);
+        product2.setCategory(categoryDAO.find(108L));
+
+        ProductImage product2image=new ProductImage("https://images/products/ghetto-fabulous/1400/truck-pant.jpg");
+        ProductImage product2image2=new ProductImage("https://images/products/ghetto-fabulous/550/truck-pant.jpg");
+        ProductImage product2image3=new ProductImage("https://image/products/ghetto-fabulous/340/truck-pant.jpg");
+        ProductImage product2image4=new ProductImage("https://image/products/ghetto-fabulous/75/truck-pant.jpg");
+        product2.addImage(product2image);
+        product2.addImage(product2image2);
+        product2.addImage(product2image3);
+        product2.addImage(product2image4);
+
+        Product product3 = new Product("Chino Short Pants");
+        Brand product3Brand = new Brand("Ndisto (R)");
+        product3.setBrand(product3Brand);
+        product3.setCategory(categoryDAO.find(108L));
+
+
+        ProductImage product3image=new ProductImage("https://images/products/ndisto/1400/chino-short-pants.jpg");
+        ProductImage product3image2=new ProductImage("https://images/products/ndisto/550/tchino-short-pants.jpg");
+        ProductImage product3image3=new ProductImage("https://images/products/ndisto/340/chino-short-pants.jpg");
+        ProductImage product3image4=new ProductImage("https://images/products/ndisto/75/chino-short-pants.jpg");
+
+        product3.addImage(product3image);
+        product3.addImage(product3image2);
+        product3.addImage(product3image3);
+        product3.addImage(product3image4);
+        productDAO.save(product);
+        productDAO.save(product2);
+        productDAO.save(product3);
+
+       /* List<Product> products = new ArrayList<>();
+        products.add(product);
+        products.add(product2);
+        products.add(product3);
+        productDAO.saveAll(products);*/
     }
 
 }

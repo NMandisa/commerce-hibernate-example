@@ -6,15 +6,15 @@ import za.co.fynbos.dao.ProductDAO;
 import za.co.fynbos.model.Product;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * @author Noxolo.Mkhungo
  */
 @Transactional
 public class DefaultProductDAO extends AbstractDAO implements ProductDAO {
-    @Transactional
+
     @Override
     public void save(Product product) {
         transaction.begin();
@@ -30,10 +30,12 @@ public class DefaultProductDAO extends AbstractDAO implements ProductDAO {
         return productImagesEntityGraph;
     }
     @Override
-    public void saveAll(Set<Product> products) {}
+    public void saveAll(List<Product> products) {
+        for(Product product: products){save(product);}
+    }
     @Override
-    public Product find(Long id) {
-        return null;
+    public Product find(Long productId) {
+        return entityManager.find(Product.class,productId);
     }
 
     @Override
@@ -42,7 +44,7 @@ public class DefaultProductDAO extends AbstractDAO implements ProductDAO {
     }
 
     @Override
-    public boolean deleteAll(Set<Product> products) {
+    public boolean deleteAll(List<Product> products) {
         return false;
     }
 
@@ -51,7 +53,7 @@ public class DefaultProductDAO extends AbstractDAO implements ProductDAO {
         return false;
     }
     @Override
-    public boolean editAll(Set<Product> oldT, Set<Product> newTs) {
+    public boolean editAll(List<Product> oldT, List<Product> newTs) {
         return false;
     }
 }

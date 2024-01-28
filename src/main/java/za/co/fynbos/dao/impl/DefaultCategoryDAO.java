@@ -52,7 +52,6 @@ public class DefaultCategoryDAO extends AbstractDAO implements CategoryDAO {
 										.setHint("jakarta.persistence.loadgraph", entityManager.getEntityGraph("category_products_entity_graph"))
 										.getSingleResult();
     }
-    @Transactional
     @Override
     public void save(Category category) {
 
@@ -61,9 +60,8 @@ public class DefaultCategoryDAO extends AbstractDAO implements CategoryDAO {
         transaction.commit();
         //return the saved category logic pending
     }
-    @Transactional
     @Override
-    public void saveAll(Set<Category> categories) {
+    public void saveAll(List<Category> categories) {
         //uses persistence context and is taxing to db
         //for(Category category: categories){save(category);}
         //return the list of saved categories logic pending
@@ -86,7 +84,7 @@ public class DefaultCategoryDAO extends AbstractDAO implements CategoryDAO {
         return affectRow == 1;
     }
     @Override
-    public boolean deleteAll(@NonNull Set<Category> categories) {
+    public boolean deleteAll(@NonNull List<Category> categories) {
        // for(Category category: categories) {
           //  delete(category.getCategoryId());}
         //should be a direct db write not loaded to persistence context
@@ -107,7 +105,7 @@ public class DefaultCategoryDAO extends AbstractDAO implements CategoryDAO {
         return rowUpdated == 1;//the affected row is 1 than update was successful
     }
     @Override
-    public boolean editAll(@NonNull Set<Category> oldCategories,@NonNull Set<Category> categories) {
+    public boolean editAll(@NonNull List<Category> oldCategories,@NonNull List<Category> categories) {
         for(Category oldCategory : oldCategories)
         {Long id = oldCategory.getCategoryId();
             for(Category category : categories)

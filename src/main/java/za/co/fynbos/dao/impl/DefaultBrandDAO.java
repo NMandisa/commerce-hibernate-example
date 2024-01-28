@@ -58,13 +58,14 @@ public class DefaultBrandDAO extends AbstractDAO implements BrandDAO {
         //return the saved brand logic pending
     }
     @Override
-    public void saveAll(Set<Brand> brands) {
+    public void saveAll(List<Brand> brands) {
         for(Brand brand: brands){save(brand);}
+        //use fix later... to write directly to db not use persistent context
         //return the List of all saved brand logic pending
     }
 
     @Override
-    public Brand find(Long id) {return entityManager.find(Brand.class,id);}
+    public Brand find(Long brandId) {return entityManager.find(Brand.class,brandId);}
     @Override
     public boolean delete(Long brandId) {
         // create delete
@@ -80,7 +81,7 @@ public class DefaultBrandDAO extends AbstractDAO implements BrandDAO {
     }
 
     @Override
-    public boolean deleteAll(Set<Brand> brands) {
+    public boolean deleteAll(List<Brand> brands) {
         for (Brand deleteBrand : brands)
         {delete(deleteBrand.getBrandId());}
         return false;//pending...
@@ -115,7 +116,7 @@ public class DefaultBrandDAO extends AbstractDAO implements BrandDAO {
     }
 
     @Override
-    public boolean editAll(Set<Brand> oldBrands,Set<Brand> newBrands) {
+    public boolean editAll(List<Brand> oldBrands,List<Brand> newBrands) {
         for (Brand oldBrand : oldBrands){
             Long brandId = oldBrand.getBrandId();
             for (Brand newBrand : newBrands){
