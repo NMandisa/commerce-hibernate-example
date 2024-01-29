@@ -16,6 +16,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.UpdateTimestamp;
+import za.co.fynbos.model.image.ProductImage;
 
 /**
  * @author Noxolo.Mkhungo
@@ -82,13 +83,13 @@ public class Product implements Serializable {
 	)
 	private Brand brand;
 
-	@Column(name = "date_created")
+	@Column(name = "product_date_created")
 	@CreationTimestamp
-	private LocalDateTime dateCreated;
+	private LocalDateTime productDateCreated;
 
-	@Column(name = "last_updated")
+	@Column(name = "product_last_updated")
 	@UpdateTimestamp
-	private LocalDateTime lastUpdated;
+	private LocalDateTime productLastUpdated;
 	public Product(String productName){this.productName=productName;}
 	public void addBrand(Brand brand){
 		brand.addProduct(this);
@@ -133,6 +134,6 @@ public class Product implements Serializable {
 	public int hashCode() {return getClass().hashCode();}*/
 
 	public String toString(){
-		return "product id : "+productId+" product name : "+ productName +"\n product images : "+images.toString()+"\n  product price :"+productPrice+" last updated : "+lastUpdated+ " date created : " +dateCreated+ "\n brands :"+brand+"\n";
+		return "product id : "+productId+" product name : "+ productName +"\n product images : "+images.toString()+"\n  product price :"+productPrice+" last updated : "+productLastUpdated+ " date created : " +productDateCreated+ "\n brands :"+brand+"\n";
 	}
 }

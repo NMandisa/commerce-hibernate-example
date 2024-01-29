@@ -10,6 +10,13 @@
 			<query><![CDATA[select c from Category c where c.categoryId = :id]]></query>
 		</named-query>
 	</entity>
+	<!--<named-stored-procedure-query name="" procedure-name="">
+		<description></description>
+		<hint name="" value=""></hint>
+		<parameter class=""/>
+		<result-class>za.co.fynbos.dto...</result-class>
+		<result-set-mapping></result-set-mapping>
+	</named-stored-procedure-query>-->
 </entity-mappings>
 		<!--Global Cascading Persist-->
 <persistence-unit-metadata>

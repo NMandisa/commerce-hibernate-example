@@ -13,6 +13,8 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import za.co.fynbos.model.image.BrandImage;
+import za.co.fynbos.model.image.CategoryImage;
 
 /**
  * @author Noxolo.Mkhungo
@@ -21,12 +23,10 @@ import org.hibernate.annotations.FetchMode;
 
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @NamedEntityGraph(
 		name = "brand_products_entity_graph",
-		attributeNodes = {@NamedAttributeNode("products")})
+		attributeNodes = {@NamedAttributeNode("products"),@NamedAttributeNode("images")})
 @NamedNativeQuery(
 		name = "Brand.findByDescription",
 		query = "select * from db_commerce.brand b where b.brand_description = :description",
@@ -50,6 +50,10 @@ public class Brand implements Serializable {
 
 	@Column(name = "brand_description")
 	private String brandDescription;
+
+	@OneToMany(mappedBy = "brand",cascade = CascadeType.ALL,fetch = FetchType.LAZY,orphanRemoval = true)
+	@Fetch(FetchMode.SUBSELECT)
+	private List<BrandImage> images= new ArrayList<>();
 
 	@OneToMany(mappedBy = "brand",fetch = FetchType.LAZY,cascade = CascadeType.PERSIST)
 	@Fetch(FetchMode.SUBSELECT)

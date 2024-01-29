@@ -12,6 +12,8 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import za.co.fynbos.model.image.CategoryImage;
+import za.co.fynbos.model.image.ProductImage;
 
 /**
  * @author Noxolo.Mkhungo
@@ -39,6 +41,10 @@ public class Category implements Serializable{
 	@Column(name = "category_name")
 	private String categoryName;
 
+	@OneToMany(mappedBy = "category",cascade = CascadeType.ALL,fetch = FetchType.LAZY,orphanRemoval = true)
+	@Fetch(FetchMode.SUBSELECT)
+	private List<CategoryImage> images= new ArrayList<>();
+
 	@OneToMany(
 			mappedBy = "category",
 			cascade={CascadeType.PERSIST, CascadeType.REMOVE},fetch = FetchType.LAZY,
@@ -52,7 +58,7 @@ public class Category implements Serializable{
 	)
 	//@JoinColumn(name = "category_id" )
 	@JoinTable(
-			name = "category_has_categories",
+			name = "category_has_child_categories",
 			joinColumns = @JoinColumn(name = "parent_category_id", referencedColumnName = "category_id"),
 			inverseJoinColumns = @JoinColumn(name = "child_category_id", referencedColumnName = "category_id",foreignKey=@ForeignKey(name = "categories_category_fk")
 			))

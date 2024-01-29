@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import za.co.fynbos.model.Brand;
 import za.co.fynbos.model.Category;
-import za.co.fynbos.model.ProductImage;
+import za.co.fynbos.model.image.ProductImage;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;

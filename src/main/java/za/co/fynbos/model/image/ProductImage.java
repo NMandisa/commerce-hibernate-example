@@ -1,9 +1,10 @@
-package za.co.fynbos.model;
+package za.co.fynbos.model.image;
 
 import jakarta.persistence.*;
 import lombok.*;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import za.co.fynbos.model.Product;
 
 import java.io.Serializable;
 
