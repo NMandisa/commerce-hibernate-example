@@ -3,8 +3,6 @@ package za.co.fynbos.model.image;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.AnyDiscriminatorValues;
-import org.hibernate.annotations.DiscriminatorOptions;
 
 import java.io.Serializable;
 

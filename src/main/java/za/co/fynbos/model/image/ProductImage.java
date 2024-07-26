@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import za.co.fynbos.enums.ProductImageType;
 import za.co.fynbos.model.Product;
 
 import java.io.Serializable;
@@ -29,6 +30,10 @@ public class ProductImage implements Serializable {
             inverseJoinColumns = @JoinColumn(name = "product_id", referencedColumnName = "product_id",foreignKey=@ForeignKey(name = "product_id_fk")
             ))
     private Product product;
+
+    @Column(name = "image_type")
+    @Enumerated(EnumType.STRING)
+    private ProductImageType imageType;
 
     public  ProductImage(String imageUrl){
         this.imageUrl=imageUrl;
